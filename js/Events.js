@@ -41,7 +41,6 @@ function key(event, sign) {
     }
 }
 
-
 //--------------------------------------------------------------------
 // Phone screen tap for movement
 //--------------------------------------------------------------------
@@ -60,6 +59,7 @@ function click(event) {
 
 
 
+
 function initEvents() {
     window.addEventListener("keydown", onkey, false);
 
@@ -69,8 +69,15 @@ function initEvents() {
     document.addEventListener('keyup', function (event) {
         key(event, -1);
     }, false);
-
+    //    document.addEventListener('touchstart', function (event) {
+    //        tap(event, 1);
+    //    }, false);
+    //    document.addEventListener('touchend', function (event) {
+    //        tap(event, -1);
+    //    }, false);
+    //document.addEventListener('click', click);
 }
+
 
 
 

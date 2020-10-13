@@ -125,6 +125,7 @@ function setupMaterial(fShader) {
  */
 function updateMaterial() {
     //example of how this worked
+    globals.material.uniforms.currentBoostMat.value = globals.position.boost;
 
     globals.material.uniforms.lightRad.value = globals.lightRad;
     globals.material.uniforms.refl.value = globals.refl;

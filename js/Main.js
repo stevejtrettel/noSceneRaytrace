@@ -43,22 +43,22 @@ let globals = {
     material: undefined,
     controls: undefined,
     position: undefined,
-    cellPosition: undefined,
-    invCellPosition: undefined,
+    //    cellPosition: undefined,
+    //    invCellPosition: undefined,
     renderer: undefined,
     screenResolution: undefined,
-    gens: undefined,
-    invGens: undefined,
-    projDomain: undefined,
-    lightPositions: [],
-    lightColors: [],
-    globalObjectPosition: undefined,
-    display: 1,
-    res: 2,
+    //    gens: undefined,
+    //    invGens: undefined,
+    //    projDomain: undefined,
+    //    lightPositions: [],
+    //    lightColors: [],
+    //    globalObjectPosition: undefined,
+    //    display: 1,
+    //    res: 2,
     lightRad: 1.,
     refl: 0.5,
-    foggy: 0.5,
-    planes: 1
+    //    foggy: 0.5,
+    //    planes: 1
 };
 
 //----------------------------------------------------------------------------------------------------------------------
@@ -103,8 +103,9 @@ function init() {
     globals.effect = new VREffect(globals.renderer);
     camera = new OrthographicCamera(-1, 1, 1, -1, 1 / Math.pow(2, 53), 1);
     globals.controls = new Controls();
+    globals.controls.setKeyboard();
     initGeometry();
-    // initObjects();
+    //initObjects();
     //globals.phoneOrient = [null, null, null];
 
     loadShaders();
@@ -131,21 +132,20 @@ function loadShaders() {
     let loader = new FileLoader();
     loader.setResponseType('text');
     loader.load('shaders/01structs.glsl', function (structs) {
-        loader.load('shaders/02localGeo.glsl', function (locGeo) {
-            loader.load('shaders/03globalGeo.glsl', function (globGeo) {
-                loader.load('shaders/04setup.glsl', function (setup) {
-                    loader.load('shaders/05sky.glsl', function (sky) {
-                        loader.load('shaders/06trace.glsl', function (trace) {
-                            loader.load('shaders/07main.glsl', function (run) {
-                                let main = structs.concat(locGeo).concat(globGeo).concat(setup).concat(sky).concat(trace).concat(run);
-                                //The rest of the shader-building is below
-                                mainFrag = main;
-                                setupMaterial(main);
-                                globals.effect.setSize(globals.screenResolution.x, globals.screenResolution.y);
+        loader.load('shaders/02geom.glsl', function (geo) {
+            loader.load('shaders/04setup.glsl', function (setup) {
+                loader.load('shaders/05sky.glsl', function (sky) {
+                    loader.load('shaders/06trace.glsl', function (trace) {
+                        loader.load('shaders/07main.glsl', function (run) {
+                            let main = structs.concat(geo).concat(setup).concat(sky).concat(trace).concat(run);
+                            //The rest of the shader-building is below
+                            mainFrag = main;
+                            setupMaterial(main);
+                            globals.effect.setSize(globals.screenResolution.x, globals.screenResolution.y);
 
-                                //Setup a "quad" to render on-------------------------
-                                let geom = new BufferGeometry();
-                                let vertices = new Float32Array([
+                            //Setup a "quad" to render on-------------------------
+                            let geom = new BufferGeometry();
+                            let vertices = new Float32Array([
                 -1.0, -1.0, 0.0,
                 1.0, -1.0, 0.0,
                 1.0, 1.0, 0.0,
@@ -154,11 +154,10 @@ function loadShaders() {
                 1.0, 1.0, 0.0,
                 -1.0, 1.0, 0.0
             ]);
-                                geom.setAttribute('position', new BufferAttribute(vertices, 3));
-                                mesh = new Mesh(geom, globals.material);
-                                scene.add(mesh);
-                                animate();
-                            });
+                            geom.setAttribute('position', new BufferAttribute(vertices, 3));
+                            mesh = new Mesh(geom, globals.material);
+                            scene.add(mesh);
+                            animate();
                         });
                     });
                 });
@@ -207,6 +206,7 @@ function animate() {
     globals.effect.render(scene, camera, animate);
     stats.end();
 }
+
 
 //----------------------------------------------------------------------------------------------------------------------
 // Where the magic happens
