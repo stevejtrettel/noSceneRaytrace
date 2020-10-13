@@ -87,7 +87,7 @@ void main(){
      
     
     setVariables();
-    createLights();
+   // createLights();
     
     //generators(display,gens);
    // setResolution(resol);

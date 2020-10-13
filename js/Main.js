@@ -11,7 +11,7 @@ import {
 
 import {
     initGeometry,
-    initObjects,
+    // initObjects,
     setupMaterial,
     updateMaterial
 } from "./Uniforms.js";
@@ -104,7 +104,7 @@ function init() {
     camera = new OrthographicCamera(-1, 1, 1, -1, 1 / Math.pow(2, 53), 1);
     globals.controls = new Controls();
     initGeometry();
-    initObjects();
+    // initObjects();
     //globals.phoneOrient = [null, null, null];
 
     loadShaders();
@@ -133,25 +133,19 @@ function loadShaders() {
     loader.load('shaders/01structs.glsl', function (structs) {
         loader.load('shaders/02localGeo.glsl', function (locGeo) {
             loader.load('shaders/03globalGeo.glsl', function (globGeo) {
-                loader.load('shaders/04basicSDFs.glsl', function (basic) {
-                    loader.load('shaders/05setup.glsl', function (setup) {
-                        loader.load('shaders/06scene.glsl', function (theScene) {
-                            loader.load('shaders/07teleport.glsl', function (teleport) {
-                                loader.load('shaders/08raymarch.glsl', function (raymarch) {
-                                    loader.load('shaders/09materials.glsl', function (material) {
-                                        loader.load('shaders/10lighting.glsl', function (light) {
-                                            loader.load('shaders/11bouncing.glsl', function (bounce) {
-                                                loader.load('shaders/12shader.glsl', function (shade) {
-                                                    loader.load('shaders/13main.glsl', function (run) {
-                                                        let main = structs.concat(locGeo).concat(globGeo).concat(basic).concat(setup).concat(theScene).concat(teleport).concat(raymarch).concat(material).concat(light).concat(bounce).concat(shade).concat(run);
-                                                        //The rest of the shader-building is below
-                                                        mainFrag = main;
-                                                        setupMaterial(main);
-                                                        globals.effect.setSize(globals.screenResolution.x, globals.screenResolution.y);
+                loader.load('shaders/04setup.glsl', function (setup) {
+                    loader.load('shaders/05sky.glsl', function (sky) {
+                        loader.load('shaders/06trace.glsl', function (trace) {
+                            loader.load('shaders/07main.glsl', function (run) {
+                                let main = structs.concat(locGeo).concat(globGeo).concat(setup).concat(sky).concat(trace).concat(run);
+                                //The rest of the shader-building is below
+                                mainFrag = main;
+                                setupMaterial(main);
+                                globals.effect.setSize(globals.screenResolution.x, globals.screenResolution.y);
 
-                                                        //Setup a "quad" to render on-------------------------
-                                                        let geom = new BufferGeometry();
-                                                        let vertices = new Float32Array([
+                                //Setup a "quad" to render on-------------------------
+                                let geom = new BufferGeometry();
+                                let vertices = new Float32Array([
                 -1.0, -1.0, 0.0,
                 1.0, -1.0, 0.0,
                 1.0, 1.0, 0.0,
@@ -160,16 +154,10 @@ function loadShaders() {
                 1.0, 1.0, 0.0,
                 -1.0, 1.0, 0.0
             ]);
-                                                        geom.setAttribute('position', new BufferAttribute(vertices, 3));
-                                                        mesh = new Mesh(geom, globals.material);
-                                                        scene.add(mesh);
-                                                        animate();
-                                                    });
-                                                });
-                                            });
-                                        });
-                                    });
-                                });
+                                geom.setAttribute('position', new BufferAttribute(vertices, 3));
+                                mesh = new Mesh(geom, globals.material);
+                                scene.add(mesh);
+                                animate();
                             });
                         });
                     });
@@ -178,6 +166,7 @@ function loadShaders() {
         });
     });
 }
+
 
 
 
