@@ -69,13 +69,7 @@ function initEvents() {
     document.addEventListener('keyup', function (event) {
         key(event, -1);
     }, false);
-    //    document.addEventListener('touchstart', function (event) {
-    //        tap(event, 1);
-    //    }, false);
-    //    document.addEventListener('touchend', function (event) {
-    //        tap(event, -1);
-    //    }, false);
-    //document.addEventListener('click', click);
+
 }
 
 

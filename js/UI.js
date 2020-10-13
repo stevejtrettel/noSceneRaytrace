@@ -29,6 +29,7 @@ let initGui = function () {
     //using to control size of the change in index of refraction
     let reflController = gui.add(guiInfo, 'refl', 0., 3.).name("Refractivity");
 
+    let recordingController = gui.add(guiInfo, 'recording').name("Record video");
 
     lightRadController.onChange(function (value) {
         globals.lightRad = value;
@@ -36,6 +37,22 @@ let initGui = function () {
 
     reflController.onChange(function (value) {
         globals.refl = value;
+    });
+
+
+    recordingController.onFinishChange(function (value) {
+        if (value == true) {
+            guiInfo.recording = true;
+            capturer = new CCapture({
+                format: 'jpg'
+            });
+            capturer.start();
+        } else {
+            guiInfo.recording = false;
+            capturer.stop();
+            capturer.save();
+            // onResize(); //Resets us back to window size
+        }
     });
 
 

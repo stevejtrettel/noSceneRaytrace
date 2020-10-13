@@ -56,68 +56,68 @@ let Controls = function () {
     this.manualMoveRate = new Float32Array([0.0, 0.0, 0.0]);
     this.updateTime = 0;
 
-    let keyboardFR = {
-        81: {
-            index: 1,
-            sign: 1,
-            active: 0
-        }, // q
-        68: {
-            index: 1,
-            sign: -1,
-            active: 0
-        }, // d
-        90: {
-            index: 0,
-            sign: 1,
-            active: 0
-        }, // z
-        83: {
-            index: 0,
-            sign: -1,
-            active: 0
-        }, // s
-        65: {
-            index: 2,
-            sign: -1,
-            active: 0
-        }, // a
-        69: {
-            index: 2,
-            sign: 1,
-            active: 0
-        }, // e
-        38: {
-            index: 3,
-            sign: 1,
-            active: 0
-        }, // up
-        40: {
-            index: 3,
-            sign: -1,
-            active: 0
-        }, // down
-        37: {
-            index: 4,
-            sign: -1,
-            active: 0
-        }, // left
-        39: {
-            index: 4,
-            sign: 1,
-            active: 0
-        }, // right
-        165: {
-            index: 5,
-            sign: 1,
-            active: 0
-        }, // ù
-        61: {
-            index: 5,
-            sign: -1,
-            active: 0
-        }, // =
-    };
+//    let keyboardFR = {
+        //        81: {
+        //            index: 1,
+        //            sign: 1,
+        //            active: 0
+        //        }, // q
+        //        68: {
+        //            index: 1,
+        //            sign: -1,
+        //            active: 0
+        //        }, // d
+        //        90: {
+        //            index: 0,
+        //            sign: 1,
+        //            active: 0
+        //        }, // z
+        //        83: {
+        //            index: 0,
+        //            sign: -1,
+        //            active: 0
+        //        }, // s
+        //        65: {
+        //            index: 2,
+        //            sign: -1,
+        //            active: 0
+        //        }, // a
+        //        69: {
+        //            index: 2,
+        //            sign: 1,
+        //            active: 0
+        //        }, // e
+        //        38: {
+        //            index: 3,
+        //            sign: 1,
+        //            active: 0
+        //        }, // up
+        //        40: {
+        //            index: 3,
+        //            sign: -1,
+        //            active: 0
+        //        }, // down
+        //        37: {
+        //            index: 4,
+        //            sign: -1,
+        //            active: 0
+        //        }, // left
+        //        39: {
+        //            index: 4,
+        //            sign: 1,
+        //            active: 0
+        //        }, // right
+        //        165: {
+        //            index: 5,
+        //            sign: 1,
+        //            active: 0
+        //        }, // ù
+        //        61: {
+        //            index: 5,
+        //            sign: -1,
+        //            active: 0
+        //        }, // =
+        //    };
     let keyboardUS = {
         65: {
             index: 1,

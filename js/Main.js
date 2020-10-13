@@ -18,7 +18,8 @@ import {
 
 import {
     initGui,
-    guiInfo
+    guiInfo,
+    capturer
 } from "./UI.js";
 import {
     initEvents,
@@ -100,17 +101,19 @@ function init() {
     });
     document.body.appendChild(globals.renderer.domElement);
     globals.screenResolution = new Vector2(window.innerWidth, window.innerHeight);
+
     globals.effect = new VREffect(globals.renderer);
+
     camera = new OrthographicCamera(-1, 1, 1, -1, 1 / Math.pow(2, 53), 1);
+
     globals.controls = new Controls();
     globals.controls.setKeyboard();
-    initGeometry();
-    //initObjects();
-    //globals.phoneOrient = [null, null, null];
 
+    initGeometry();
     loadShaders();
     initEvents();
     initGui();
+
     stats = new Stats();
     stats.showPanel(1);
     stats.showPanel(2);
