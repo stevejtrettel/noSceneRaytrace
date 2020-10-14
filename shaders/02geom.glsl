@@ -77,7 +77,7 @@ Vector turnAround(Vector v){
 // flow the given vector during time t
 Vector flow(Vector v, float t) {
     
-    vec4 diff=t*vec4(v.dir,0.);
+    vec4 diff=t*vec4(v.dir);
     
     Point newPos=Point(v.pos.coords+diff);
     

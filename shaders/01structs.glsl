@@ -69,10 +69,10 @@ Point shiftPoint(Point p, vec3 v, float ep){
 
 struct Vector {
     Point pos;// position on the manifold
-    vec3 dir;// pull back of the tangent vector at the origin written in the appropriate basis
+    vec4 dir;// pull back of the tangent vector at the origin written in the appropriate basis
 };
 
-Vector createVector(Point p, vec3 dp) {
+Vector createVector(Point p, vec4 dp) {
     return Vector(p, dp);
 }
 
@@ -143,7 +143,7 @@ Isometry makeInvLeftTranslation(Point pt) {
 
 
 
-Isometry translateByVector(vec3 dir) {
+Isometry translateByVector(vec4 dir) {
     mat4 matrix =  mat4(
     1, 0., 0., 0.,
     0., 1, 0., 0.,
@@ -195,10 +195,10 @@ Vector translate(Isometry isom, Vector v) {
 // apply a local rotation of the direction
 Vector rotateByFacing(mat4 mat, Vector v){
     // notice that the facing is an element of SO(3) which refers to the basis (e_x, e_y, e_w).
-    vec4 aux = vec4(v.dir, 0.);
+    vec4 aux = v.dir;
     aux = mat * aux;
 
-    return Vector(v.pos, aux.xyz);
+    return Vector(v.pos, aux);
 }
 
 

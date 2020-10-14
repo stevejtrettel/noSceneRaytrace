@@ -3,13 +3,18 @@
 // NON-CONSTANT MEDIA
 //----------------------------------------------------------------------------------------------------------------------
 
-//the index of refraction of a varying medium is determined by a vector field
-vec3 gradN(vec3 p){
+//the index of refraction of a varying medium is determined by a vector field (which is the gradient of the index function)
+//this vector field is below:
+
+
+
+//the vector field controlling the ODE
+
+vec4 vecField(vec4 p){
+        vec4 cent=vec4(0.,2.,0.,1.);
     
-    vec3 cent=vec3(0.,2.,0.);
-    
-    vec3 v=p-cent;
-    vec3 n=normalize(v);
+    vec4 v=p-cent;
+    vec4 n=normalize(v);
     float dist=length(v);
     
     //lightRad is a uniform controlling the size of the disturbance
@@ -20,20 +25,6 @@ vec3 gradN(vec3 p){
 }
 
 
-vec3 gradN(Point p){
-    
-    return gradN(p.coords.xyz);
-}
-
-vec3 gradN(Vector tv){
-    return gradN(tv.pos);
-}
-
-
-
-
-
-
 
 
 
@@ -41,40 +32,100 @@ vec3 gradN(Vector tv){
 // Marching Through NonConstant Media
 //----------------------------------------------------------------------------------------------------------------------
 
-void refractTrace(Vector tv){
-    //raytrace until you are a certain distance from the original viewer, then stop and set sampletv
+
+
+
+
+void euler(inout Vector tv){
     
-    //set dt
-    float dt=0.01;
-    //set number of steps
-    int numSteps=500;
+    //do an iteration of rk4 to the second order equation y''=vector field
     
-    //set initial conditions
-    float x,y,z;//position
-    float u,v,w;//direction
+    //timestep
+    float dt=0.05;
     
-    vec3 p=tv.pos.coords.xyz;
-    vec3 dir=tv.dir;    
+    //constants computed during the process
+    vec4 k1;
+    vec4 j1;
     
-    //first; maybe just raytrace a fixed number of steps:
-    for(int k=0;k<numSteps;k++){
+    //initial conditions
+    vec4 y=tv.pos.coords;//position
+    vec4 u=tv.dir;//velocity
+    
+    
+    //iteratively step through rk4
+    for(int n=0;n<100;n++){
         
-        //update the direction based on the position:
-        p+=dt*dir;
-        
-        //update direction
-        dir+=dt*gradN(p);
+        //compute j1,k2
+        j1=u*dt;
+        k1=vecField(y)*dt;
+      
+        y+=j1;
+        u+=k1;
     }
     
-    //after march; build final tangent vector
-Vector finalV;
-    finalV.pos.coords=vec4(p,1.);
-    finalV.dir=dir;
-    
-    sampletv=finalV;
-    distToViewer=float(numSteps)*dt;
+    //after the loop, reassemble tv at the endpoint
+    sampletv=Vector(Point(y),u);
     
 }
+
+
+
+
+
+void rk4(inout Vector tv){
+    
+    //do an iteration of rk4 to the second order equation y''=vector field
+    
+    //timestep
+    float dt=0.05;
+    
+    //constants computed during the process
+    vec4 k1,k2,k3,k4;
+    vec4 j1,j2,j3,j4;
+    
+    //initial conditions
+    vec4 y=tv.pos.coords;//position
+    vec4 u=tv.dir;//velocity
+    
+    
+    //iteratively step through rk4
+    for(int n=0;n<100;n++){
+        
+        //compute j1,k2
+        j1=u*dt;
+        k1=vecField(y)*dt;
+        
+        //compute j2,k2
+        j2=(u+j1/2.)*dt;
+        k2=vecField(y+k1/2.)*dt;
+        
+        //compute j3,k3
+        j3=(u+j2/2.)*dt;
+        k3=vecField(y+k2/2.)*dt;
+        
+        //compute j4,k4
+        j4=(u+j3)*dt;
+        k4=vecField(y+k3)*dt;
+        
+        
+        //compute the updated y and u
+        u+=k1/6.+k2/3.+k3/3.+k4/6.;
+        y+=j1/6.+j2/3.+j3/3.+j4/6.;
+            
+//        y+=j1;
+//        u+=k1;
+    }
+    
+    //after the loop, reassemble tv at the endpoint
+    sampletv=Vector(Point(y),u);
+    
+}
+
+
+
+
+
+
 
 
 
@@ -96,7 +147,7 @@ vec3 getPixelColor(Vector rayDir){
     vec3 totalColor=vec3(0.);
      
     
-    refractTrace(rayDir);
+    rk4(rayDir);
     totalColor=skyTex(sampletv);
 
     

@@ -17,13 +17,11 @@ vec3 checkerboard(vec2 v){
 
 
 
-vec2 toSphCoords(vec3 v){
+vec2 toSphCoords(vec4 v){
 float theta=atan(v.y,v.x);
 float phi=acos(v.z);
 return vec2(theta,phi);
 }
-
-
 
 
 

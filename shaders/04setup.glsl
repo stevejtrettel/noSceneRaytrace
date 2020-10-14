@@ -43,55 +43,6 @@ int hitWhich = 0;
 //set by raymarch
 Vector sampletv;
 float distToViewer;
-//bool isSky=false;
-
-
-//float side;
-//remember which side of the object youre on when the raymarch ends
-
-
-//----------------------------------------------------------------------------------------------------------------------
-// Stuff For the Tiling
-//----------------------------------------------------------------------------------------------------------------------
-
-//Isometry gens[6];
-//int numGens;
-//
-////normal vector to faces in the affine model fundamental domain
-//uniform vec3 nV[3];
-////face pairing in affine model fundamental domain
-//uniform vec3 pV[3];
-//
-//
-
-
-
-//----------------------------------------------------------------------------------------------------------------------
-// materials and paths
-//----------------------------------------------------------------------------------------------------------------------
-//
-////in case you need to save something 
-//Path extraPath;
-//Material extraMat;
-//
-////make our functions not have to carry around the outside material?
-//Material outsideMat;
-//
-//
-
-//----------------------------------------------------------------------------------------------------------------------
-// Phong Shading Stuff
-//----------------------------------------------------------------------------------------------------------------------
-
-//Vector toLight;
-//float distToLight;
-//Vector fromLight;
-//Vector reflLight;
-//Vector atLight;
-//vec4 colorOfLight;
-//vec3 colorOfLight3;
-
-
 
 
 
@@ -101,21 +52,11 @@ float distToViewer;
 // Translation & Utility Variables
 //----------------------------------------------------------------------------------------------------------------------
 uniform vec2 screenResolution;
-//uniform mat4 invGenerators[6];//
 
 uniform mat4 currentBoostMat;
 uniform mat4 facing;
 
-//uniform mat4 cellBoostMat;
-//uniform mat4 invCellBoostMat;
-
 Isometry currentBoost;
-//Isometry cellBoost;
-//Isometry invCellBoost;
-
-
-
-
 
 
 
@@ -123,47 +64,18 @@ Isometry currentBoost;
 //----------------------------------------------------------------------------------------------------------------------
 // Lighting Variables & Global Object Variables
 //----------------------------------------------------------------------------------------------------------------------
-//uniform vec4 lightPositions[4];
-//uniform vec4 lightIntensities[4];
-
-//uniform mat4 globalObjectBoostMat;
-//uniform float globalSphereRad;
 
 uniform samplerCube earthCubeTex;
 uniform sampler2D tex;
-
-
 
 
 uniform float time;
 
 uniform float lightRad;
 uniform float refl;
-//uniform float foggy;
-//uniform int planes;
-///uniform int resol;
-
-//uniform int display;
-//1=CorrLight;
-//2=ConstIntensity;
-//3=NoLight
 
 
 
-
-
-//----------------------------------------------------------------------------------------------------------------------
-// Re-packaging Light Sources
-//----------------------------------------------------------------------------------------------------------------------
-
-
-//color of the sky
-//vec4 skyColor=vec4(0.,0.,0.,1.);
-//vec4 skyColor=vec4(0.5,0.6,0.7,.8);
-//
-//Phong defaultPhong;
-//
-//Light pointLight1, pointLight2, dirLight1;
 
 
 
@@ -175,30 +87,11 @@ uniform float refl;
 void setVariables(){
     
     currentBoost = Isometry(currentBoostMat);
-   // cellBoost = Isometry(cellBoostMat);
-    //invCellBoost = Isometry(invCellBoostMat);
-    
-    //nice to have a default phong value to set
-   // defaultPhong=Phong(10.,vec3(1.),vec3(1.));
+
     
 }
     
     
-//    //--- build the lights
-//   void createLights(){
-//       
-//       
-//       
-//       pointLight1=createPointLight(createPoint(3.,1.,1.),vec3(1.,1.,1.),1.,0.5);
-//    pointLight2=createPointLight(createPoint(-2.,2.,2.),vec3(1.,1.,1.),1.,0.5);
-//    
-//    dirLight1=createDirLight(vec3(0.,0.,1.),skyColor.rgb,skyColor.w);
-//
-//   }
-//
-//
-//
-
 
 
 

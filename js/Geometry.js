@@ -33,10 +33,10 @@ class Point extends Vector4 {
 
 
     /**
-     * Correct the error to make sure that the point lies on the "hyperboloid"
-     * @returns {SL2}
+     * Correct the error to make sure that the point lies on the model of our space
      */
     reduceError() {
+        //do nothing in this geometry: model is affine!
         return this;
     }
 
@@ -45,18 +45,21 @@ class Point extends Vector4 {
      * Return an encoding of the point that can be passed to the shader
      */
     serialize() {
+        //do nothing here: the point is a vec4 already
         return this;
     }
 
 }
 
+//set the origin of space
 let ORIGIN_PT = new Point().set(0., 0., 0., 1.);
+
+
+
+
 
 /**
  * Tangent vector at the origin of X
-
- * @class
- * @public
  */
 class Vector extends Vector3 {
 
@@ -90,7 +93,7 @@ class Isometry extends Matrix4 {
     }
 
 
-
+    //translate by the vector xyz
     makeLeftTranslation(v) {
         this.set(
             1, 0, 0, v.x,
@@ -102,6 +105,7 @@ class Isometry extends Matrix4 {
 
     }
 
+    //translate by the inverse of the drection xyz
     makeInvLeftTranslation(v) {
         this.set(
             1, 0, 0, -v.x,
