@@ -21,7 +21,7 @@ vec4 vecField(vec4 p){
     float dist=length(v);
     
     //lightRad is a uniform controlling the size of the disturbance
-    float mag =3.*(1.-smoothstep(1.,1.5,dist));
+    float mag =5.*(1.-smoothstep(0.,2.,dist));
     //float mag=1.-smoothstep(0.,lightRad,dist);
 
 //refl is a uniform controling the magnitude of the disturbance
@@ -81,7 +81,7 @@ void rk4(inout Vector tv){
     //do an iteration of rk4 to the second order equation y''=vector field
     
     //timestep
-    float dt=0.05;
+    float dt=0.02;
     float dist;
     
     
@@ -95,7 +95,11 @@ void rk4(inout Vector tv){
     
     
     //iteratively step through rk4
-    for(int n=0;n<100;n++){
+    for(int n=0;n<300;n++){
+        
+        //set the step size to be the min of 0.1 and distance to the sphere (right now 1.)
+        dt=min(0.1,dist-1.);
+        
         
         //compute j1,k2
         j1=u*dt;
@@ -121,7 +125,7 @@ void rk4(inout Vector tv){
         
         //if you are inside the connect sum mouth, stop
         dist=length(y.xyz);
-        if(dist<1.){
+        if(dist<1.005){
             teleport=true;
             break;}
         
@@ -133,10 +137,6 @@ void rk4(inout Vector tv){
     sampletv=Vector(Point(y),u);
     
 }
-
-
-
-
 
 
 
@@ -172,7 +172,7 @@ vec3 getPixelColor(Vector rayDir){
     if(teleport){
         //flip around and head back out
         rayDir=turnAround(sampletv);
-        nudge(rayDir);
+       // nudge(rayDir);
         rk4(rayDir);
         totalColor=cubeTexture(sampletv);
         
@@ -181,10 +181,3 @@ vec3 getPixelColor(Vector rayDir){
     return totalColor;
     
 }
-
-
-
-
-
-
-
