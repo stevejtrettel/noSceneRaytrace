@@ -21,8 +21,8 @@ vec4 vecField(vec4 p){
     float dist=length(v);
     
     //lightRad is a uniform controlling the size of the disturbance
-    float mag =5.*(1.-smoothstep(0.,2.,dist));
-    //float mag=1.-smoothstep(0.,lightRad,dist);
+    float mag =5./(dist-0.5*lightRad)*(1.-smoothstep(0.,2.*lightRad,dist));
+    
 
 //refl is a uniform controling the magnitude of the disturbance
     return -refl*mag*n; 
@@ -98,7 +98,7 @@ void rk4(inout Vector tv){
     for(int n=0;n<300;n++){
         
         //set the step size to be the min of 0.1 and distance to the sphere (right now 1.)
-        dt=min(0.1,dist-1.);
+        dt=min(0.05,dist-lightRad);
         
         
         //compute j1,k2
@@ -125,7 +125,7 @@ void rk4(inout Vector tv){
         
         //if you are inside the connect sum mouth, stop
         dist=length(y.xyz);
-        if(dist<1.005){
+        if(dist<lightRad+.005){
             teleport=true;
             break;}
         
