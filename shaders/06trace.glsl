@@ -11,9 +11,12 @@
 //the vector field controlling the ODE
 
 vec4 vecField(vec4 p){
-        vec4 cent=vec4(0.,2.,0.,1.);
     
+    //center at the origin
+    vec4 cent=vec4(0.,0.,0.,1.);
     vec4 v=p-cent;
+    
+    //direction vector from p to center point
     vec4 n=normalize(v);
     float dist=length(v);
     

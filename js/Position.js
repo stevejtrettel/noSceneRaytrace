@@ -32,6 +32,7 @@ import {
 // Function for debugging
 
 // Return a human-readable version of the matrix
+//for checking stuff in console.log
 Matrix4.prototype.toLog = function () {
     let res = '\r\n';
     for (let i = 0; i < 4; i++) {
