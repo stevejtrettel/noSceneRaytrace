@@ -45,7 +45,9 @@ Vector sampletv;
 float distToViewer;
 
 
-
+//side of the connect sum you are on;
+int side;
+bool teleport;
 
 
 //----------------------------------------------------------------------------------------------------------------------

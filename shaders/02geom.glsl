@@ -88,7 +88,7 @@ Vector flow(Vector v, float t) {
 
 
 void nudge(inout Vector v){
-    v=flow(v,0.01);
+    v=flow(v,0.1);
 }
 
 

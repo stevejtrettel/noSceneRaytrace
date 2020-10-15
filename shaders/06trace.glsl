@@ -21,7 +21,8 @@ vec4 vecField(vec4 p){
     float dist=length(v);
     
     //lightRad is a uniform controlling the size of the disturbance
-    float mag=1.-smoothstep(0.,lightRad,dist);
+    float mag =3.*(1.-smoothstep(1.,1.5,dist));
+    //float mag=1.-smoothstep(0.,lightRad,dist);
 
 //refl is a uniform controling the magnitude of the disturbance
     return -refl*mag*n; 
@@ -81,6 +82,8 @@ void rk4(inout Vector tv){
     
     //timestep
     float dt=0.05;
+    float dist;
+    
     
     //constants computed during the process
     vec4 k1,k2,k3,k4;
@@ -114,7 +117,14 @@ void rk4(inout Vector tv){
         //compute the updated y and u
         u+=k1/6.+k2/3.+k3/3.+k4/6.;
         y+=j1/6.+j2/3.+j3/3.+j4/6.;
-            
+        
+        
+        //if you are inside the connect sum mouth, stop
+        dist=length(y.xyz);
+        if(dist<1.){
+            teleport=true;
+            break;}
+        
 //        y+=j1;
 //        u+=k1;
     }
@@ -147,12 +157,26 @@ void rk4(inout Vector tv){
 
 vec3 getPixelColor(Vector rayDir){
     
+    teleport=false;
+    Vector newDir;
     vec3 totalColor=vec3(0.);
      
-    
+    //raytrace through the geometry
     rk4(rayDir);
+    
+    
+    //get the color from the direction you are pointing
     totalColor=skyTex(sampletv);
 
+    //if you entered the wormhole
+    if(teleport){
+        //flip around and head back out
+        rayDir=turnAround(sampletv);
+        nudge(rayDir);
+        rk4(rayDir);
+        totalColor=cubeTexture(sampletv);
+        
+    }
     
     return totalColor;
     
