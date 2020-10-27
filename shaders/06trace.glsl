@@ -127,7 +127,7 @@ void rk4(inout Vector tv){
     //do an iteration of rk4 to the second order equation y''=vector field
     
     //timestep
-    float dt=0.1;
+    float dt=0.15;
     
     //constants computed during the process
     velAcc k1,k2,k3,k4;
@@ -162,9 +162,11 @@ void rk4(inout Vector tv){
         k4=scale(k4,dt);
         
         //add up results:
-        velAcc total=add(k1,scale(k2,2.));
+        velAcc total=scale(k1,1.);  
+        total=add(total,scale(k2,2.));
         total=add(total,scale(k3,2.));
         total=add(total,k4);
+        total=scale(total,1./6.);
         
         tv=nudge(tv,total,1.);
         
@@ -201,7 +203,7 @@ vec3 getPixelColor(Vector rayDir){
     
     vec3 totalColor=vec3(0.);
      
-    
+   // euler(rayDir);
     rk4(rayDir);
     totalColor=skyTex(sampletv);
 
