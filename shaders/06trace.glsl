@@ -106,6 +106,31 @@ velAcc stateDeriv(Vector tv){
 
 
 
+void euler(inout Vector tv){
+    float dist;
+    float dt;
+    velAcc dState;
+    
+     //iteratively step through rk4
+    for(int n=0;n<300;n++){
+    dist=length(tv.pos.coords.xyz);
+        
+    dState=stateDeriv(tv);
+    
+    dt=min(0.1,0.5*(dist-lightRad));
+    
+    tv=nudge(tv,dState,dt);
+        
+     if(dist<lightRad+.001){
+            teleport=true;
+            break;}    
+        
+     
+        
+    }
+    
+    sampletv=tv;
+}
 
 //
 //
@@ -118,7 +143,7 @@ void rk4(inout Vector tv){
     
     //timestep
     float dist=length(tv.pos.coords.xyz);
-    float dt=0.02;
+    float dt;
     
     //constants computed during the process
     velAcc k1,k2,k3,k4;
@@ -133,7 +158,7 @@ void rk4(inout Vector tv){
     for(int n=0;n<300;n++){
         
       //set the step size to be the min of 0.1 and distance to the sphere (right now 1.)
-        dt=min(0.05,0.5*(dist-lightRad));
+        dt=min(1.,0.5*(dist-lightRad));
    
         
         //get the derivative
@@ -340,8 +365,8 @@ vec3 getPixelColor(Vector rayDir){
     vec3 totalColor=vec3(0.);
      
     //raytrace through the geometry
-    rk4(rayDir);
-    
+   // rk4(rayDir);
+   euler(rayDir);
     
     //get the color from the direction you are pointing
     totalColor=skyTex(sampletv);
@@ -350,14 +375,15 @@ vec3 getPixelColor(Vector rayDir){
     if(teleport){
         //come out the other side of the sphere but into the new world:
         rayDir.pos.coords=-sampletv.pos.coords;
-        rayDir.dir=sampletv.dir;
+        rayDir.dir=-sampletv.dir;
         
         //flip around and head back out
        // rayDir=turnAround(sampletv);
         //
         
         nudge(rayDir);
-        rk4(rayDir);
+       // rk4(rayDir);
+        euler(rayDir);
         totalColor=cubeTexture(sampletv);
         
     }
