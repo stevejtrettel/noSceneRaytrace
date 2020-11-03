@@ -9,22 +9,22 @@
 
 
 //the vector field controlling the ODE
+//this ficticious force whose trajectories have the same paths in space as the projection of schwarzchild geodesics.
 
-vec4 vecField(vec4 p){
+vec4 vecField(Vector tv){
     
-    //center at the origin
-    vec4 cent=vec4(0.,0.,0.,1.);
-    vec4 v=p-cent;
+    vec3 r=tv.pos.coords.xyz;
+    vec3 v=tv.dir.xyz;
+    float R=length(r);
     
-    //direction vector from p to center point
-    vec4 n=normalize(v);
-    float dist=length(v);
+    vec3 l=cross(r,v);
+    float L=length(l);
     
-    //lightRad is a uniform controlling the size of the disturbance
-    float mag=1.-smoothstep(0.,lightRad,dist);
-
-//refl is a uniform controling the magnitude of the disturbance
-    return -refl*mag*n; 
+    float mag=1.5*L*L/(R*R*R*R*R);
+    vec3 acc=-mag*r;
+    
+    return vec4(acc,0.);
+    
 }
 
 
@@ -75,7 +75,7 @@ velAcc stateDeriv(Vector tv){
     
  velAcc dState;
     dState.vel=vel;
-    dState.acc=vecField(pos);
+    dState.acc=vecField(tv);
     return dState;
 }
 
@@ -161,10 +161,10 @@ void rk4(inout Vector tv){
     Vector temp;
     
     //iteratively step through rk4
-    for(int n=0;n<100;n++){
+    for(int n=0;n<200;n++){
         
       //set the step size to be the min of 0.1 and distance to the sphere (right now 1.)
-       dt=0.1;
+       dt=0.2;
    
         
         //get the derivative
@@ -195,6 +195,12 @@ void rk4(inout Vector tv){
         
         tv=nudge(tv,total,1.);
         
+        
+        //if you enter the event horizon, return black
+        if(length(tv.pos.coords.xyz)<1.){
+            eventHorizon=true;
+            break;
+        }
        
     }
     
@@ -229,8 +235,11 @@ vec3 getPixelColor(Vector rayDir){
      
    //euler(rayDir);
     rk4(rayDir);
+    
+    //if you don't fall in the black hole, see where you go
+    if(!eventHorizon){
     totalColor=skyTex(sampletv);
-
+    }
     
     return totalColor;
     

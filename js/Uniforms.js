@@ -42,7 +42,7 @@ function initGeometry() {
     globals.position = new Position();
 
     //translate the position back
-    globals.position.translateBy(new Isometry().makeLeftTranslation(new Vector3(0., -2, 0.)));
+    globals.position.translateBy(new Isometry().makeLeftTranslation(new Vector3(0., -10, 0.)));
 
     //rotate to face forwards
     globals.position.rotateFacingBy(new Matrix4().set(1, 0, 0, 0, 0, 0, -1, 0, 0, 1, 0, 0, 0, 0, 0, 1));

@@ -39,6 +39,7 @@ const float fov = 90.0;
 
 int inWhich=0;
 int hitWhich = 0;
+bool eventHorizon=false;
 
 //set by raymarch
 Vector sampletv;
