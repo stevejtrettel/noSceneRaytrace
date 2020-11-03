@@ -5,13 +5,13 @@
 //----------------------------------------------------------------------------------------------------------------------
 
 vec3 checkerboard(vec2 v){
-    float x=mod(v.x,2.);
-    float y=mod(v.y,2.);
+    float x=mod(10.*v.x/6.28,2.);
+    float y=mod(10.*v.y/3.14,2.);
     
     if(x<1.&&y<1.||x>1.&&y>1.){
-        return vec3(0.7);
+        return vec3(0.0);
     }
-    else return vec3(0.2);
+    else return vec3(0.01);
 }
 
 
@@ -44,3 +44,16 @@ return SRGBToLinear(texture(tex,vec2(x,y)).rgb);
 
 }
 
+
+
+
+
+//colors unit sphere at origin with grid
+vec3 sphereGrid(Vector tv){
+
+vec2 p=toSphCoords(tv.pos.coords);
+vec3 color=checkerboard(p);
+
+return color;
+
+}

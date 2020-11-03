@@ -150,7 +150,7 @@ void rk4(inout Vector tv){
     //timestep
    // float dist=length(tv.pos.coords.xyz);
     float dt;
-    
+    float R;
     //constants computed during the process
     velAcc k1,k2,k3,k4;
     
@@ -161,10 +161,14 @@ void rk4(inout Vector tv){
     Vector temp;
     
     //iteratively step through rk4
-    for(int n=0;n<200;n++){
+    for(int n=0;n<50;n++){
         
       //set the step size to be the min of 0.1 and distance to the sphere (right now 1.)
-       dt=0.2;
+        
+        //distance from schwarzchild radius
+        R=length(tv.pos.coords.xyz)-1.;
+    
+       dt=min(1.,R/2.+0.001);
    
         
         //get the derivative
@@ -237,7 +241,10 @@ vec3 getPixelColor(Vector rayDir){
     rk4(rayDir);
     
     //if you don't fall in the black hole, see where you go
-    if(!eventHorizon){
+    if(eventHorizon){
+        totalColor=sphereGrid(sampletv);
+    }
+    else{
     totalColor=skyTex(sampletv);
     }
     
