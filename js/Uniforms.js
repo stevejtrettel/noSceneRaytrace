@@ -54,7 +54,8 @@ function initGeometry() {
 // Set up shader
 //----------------------------------------------------------------------------------------------------------------------
 
-var texture = new TextureLoader().load('images/sunset_fairway.jpg');
+var texture = new TextureLoader().load('images/MilkyWay.jpg');
+//'images/sunset_fairway.jpg');
 
 
 /**

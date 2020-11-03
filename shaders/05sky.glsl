@@ -11,7 +11,7 @@ vec3 checkerboard(vec2 v){
     if(x<1.&&y<1.||x>1.&&y>1.){
         return vec3(0.0);
     }
-    else return vec3(0.01);
+    else return vec3(0.005);
 }
 
 
