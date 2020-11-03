@@ -169,7 +169,7 @@ void rk4(inout Vector tv){
         //distance from schwarzchild radius
         R=length(tv.pos.coords.xyz)-stopRad;
     
-      dt=min(1.,max(R/2.+0.01,0.01));
+      dt=min(1.,max(R/2.,0.01));
  
         
         //get the derivative

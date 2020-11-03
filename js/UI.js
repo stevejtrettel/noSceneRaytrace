@@ -31,7 +31,7 @@ let initGui = function () {
     //    //using to control size of the change in index of refraction
     let reflController = gui.add(guiInfo, 'refl', 0., 20., 1.).name("Grid Spacing");
 
-    let radController = gui.add(guiInfo, 'rad', 0., 3., 0.01).name("Sphere Radius");
+    let radController = gui.add(guiInfo, 'rad', 1., 3., 0.01).name("Sphere Radius");
 
 
     let recordingController = gui.add(guiInfo, 'recording').name("Record video");
