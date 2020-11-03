@@ -145,6 +145,7 @@ void euler(inout Vector tv){
 
 void rk4(inout Vector tv){
     
+    float stopRad=rad;
     //do an iteration of rk4 to the second order equation y''=vector field
     
     //timestep
@@ -166,10 +167,10 @@ void rk4(inout Vector tv){
       //set the step size to be the min of 0.1 and distance to the sphere (right now 1.)
         
         //distance from schwarzchild radius
-        R=length(tv.pos.coords.xyz)-1.;
+        R=length(tv.pos.coords.xyz)-stopRad;
     
-       dt=min(1.,R/2.+0.001);
-   
+      dt=min(1.,max(R/2.+0.01,0.01));
+ 
         
         //get the derivative
         k1=stateDeriv(tv);
@@ -199,9 +200,10 @@ void rk4(inout Vector tv){
         
         tv=nudge(tv,total,1.);
         
+      
         
         //if you enter the event horizon, return black
-        if(length(tv.pos.coords.xyz)<1.){
+        if(length(tv.pos.coords.xyz)<stopRad){
             eventHorizon=true;
             break;
         }
@@ -242,12 +244,12 @@ vec3 getPixelColor(Vector rayDir){
     
     //if you don't fall in the black hole, see where you go
     if(eventHorizon){
-        totalColor=sphereGrid(sampletv);
+        totalColor=EHGrid(sampletv);
     }
     else{
     totalColor=skyTex(sampletv);
     }
-    
+    totalColor+=pSphColor;
     return totalColor;
     
 }

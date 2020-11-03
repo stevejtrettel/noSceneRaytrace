@@ -56,9 +56,9 @@ let globals = {
     //    globalObjectPosition: undefined,
     //    display: 1,
     //    res: 2,
-    lightRad: 1.,
-    refl: 0.5,
-    //    foggy: 0.5,
+    lightRad: 0.,
+    refl: 10,
+    rad: 1,
     //    planes: 1
 };
 

@@ -45,7 +45,7 @@ bool eventHorizon=false;
 Vector sampletv;
 float distToViewer;
 
-
+vec3 pSphColor;
 
 
 
@@ -75,7 +75,7 @@ uniform float time;
 uniform float lightRad;
 uniform float refl;
 
-
+uniform float rad;
 
 
 

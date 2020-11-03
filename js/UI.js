@@ -14,8 +14,9 @@ let capturer;
 let initGui = function () {
     guiInfo = { //Since dat gui can only modify object values we store variables here.
         toggleUI: true,
-        lightRad: 1.,
-        refl: 0.5,
+        lightRad: 0.,
+        refl: 10,
+        rad: 1,
         recording: false
     };
 
@@ -24,10 +25,14 @@ let initGui = function () {
 
 
     //using to control sphere size
-    let lightRadController = gui.add(guiInfo, 'lightRad', 0.0, 2.).name("Size");
+    let lightRadController = gui.add(guiInfo, 'lightRad', 0.0, 1.).name("EH Grid Brightness");
 
-    //using to control size of the change in index of refraction
-    let reflController = gui.add(guiInfo, 'refl', 0., 3.).name("Refractivity");
+
+    //    //using to control size of the change in index of refraction
+    let reflController = gui.add(guiInfo, 'refl', 0., 20., 1.).name("Grid Spacing");
+
+    let radController = gui.add(guiInfo, 'rad', 0., 3., 0.01).name("Sphere Radius");
+
 
     let recordingController = gui.add(guiInfo, 'recording').name("Record video");
 
@@ -39,6 +44,10 @@ let initGui = function () {
         globals.refl = value;
     });
 
+    radController.onChange(function (value) {
+        globals.rad = value;
+    });
+    //
 
     recordingController.onFinishChange(function (value) {
         if (value == true) {
