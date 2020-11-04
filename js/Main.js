@@ -59,6 +59,7 @@ let globals = {
     lightRad: 0.,
     refl: 10,
     rad: 1,
+    step: 1,
     //    planes: 1
 };
 

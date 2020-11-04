@@ -76,7 +76,7 @@ uniform float lightRad;
 uniform float refl;
 
 uniform float rad;
-
+uniform float step;
 
 
 

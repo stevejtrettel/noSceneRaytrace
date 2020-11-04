@@ -24,7 +24,8 @@ float numGrids=refl+4.;
     float y=mod(numGrids*v.y/3.14,2.);
     
     //lightRad controls grid brightness
-    return 1./(50.*x*(2.-x)*y*(2.-y))*color;
+    float mag=clamp(1./(50.*x*(2.-x)*y*(2.-y)),0.,20.);
+    return mag*color;
 //    
 }
 

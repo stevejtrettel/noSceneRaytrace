@@ -123,6 +123,11 @@ function setupMaterial(fShader) {
                 value: globals.rad
             },
 
+            step: {
+                type: "float",
+                value: globals.step
+            },
+
         },
 
         vertexShader: document.getElementById('vertexShader').textContent,
@@ -142,6 +147,7 @@ function updateMaterial() {
     globals.material.uniforms.lightRad.value = globals.lightRad;
     globals.material.uniforms.refl.value = globals.refl;
     globals.material.uniforms.rad.value = globals.rad;
+    globals.material.uniforms.step.value = globals.step;
 }
 
 

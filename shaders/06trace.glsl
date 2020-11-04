@@ -161,9 +161,10 @@ void rk4(inout Vector tv){
     
     Vector temp;
     
+    
     //iteratively step through rk4
     for(int n=0;n<50;n++){
-        
+       // int(50./(step+0.1))
       //set the step size to be the min of 0.1 and distance to the sphere (right now 1.)
         
         //distance from schwarzchild radius
@@ -171,7 +172,9 @@ void rk4(inout Vector tv){
     
       dt=min(1.,max(R/2.,0.01));
  
-        
+           
+     // dt=min(step,max(R/2.,0.01));
+ 
         //get the derivative
         k1=stateDeriv(tv);
         k1=scale(k1,dt);

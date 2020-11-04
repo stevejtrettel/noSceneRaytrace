@@ -17,6 +17,7 @@ let initGui = function () {
         lightRad: 0.,
         refl: 10,
         rad: 1,
+        step: 1,
         recording: false
     };
 
@@ -33,6 +34,9 @@ let initGui = function () {
 
     let radController = gui.add(guiInfo, 'rad', 1., 3., 0.01).name("Sphere Radius");
 
+    let stepController = gui.add(guiInfo, 'step', 0.01, 2., 0.01).name("StepSize");
+
+
 
     let recordingController = gui.add(guiInfo, 'recording').name("Record video");
 
@@ -46,6 +50,10 @@ let initGui = function () {
 
     radController.onChange(function (value) {
         globals.rad = value;
+    });
+
+    stepController.onChange(function (value) {
+        globals.step = value;
     });
     //
 
