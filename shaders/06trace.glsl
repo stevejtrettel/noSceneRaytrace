@@ -140,7 +140,28 @@ void euler(inout Vector tv){
 //
 
 
-
+float dT(Vector tv){
+    //distance from event horizon;
+    float R= abs(length(tv.pos.coords.xyz)-1.);
+    
+    //distance from xy plane
+    float z=abs(tv.pos.coords.z);
+    
+    //ring
+    float r=length(tv.pos.coords.xy);
+    
+    
+    //if outside this sphere, step ahead by 1
+    if(R>5.){
+        return 1.;
+    }
+    
+    else {
+        float t=min(R/2.,z/2.);
+        t=min(t,min(abs((r-4.)*z),0.));
+        return max(t,0.02);
+    }
+}
 
 
 void rk4(inout Vector tv){
@@ -163,16 +184,15 @@ void rk4(inout Vector tv){
     
     
     //iteratively step through rk4
-    for(int n=0;n<50;n++){
+    for(int n=0;n<500;n++){
        // int(50./(step+0.1))
       //set the step size to be the min of 0.1 and distance to the sphere (right now 1.)
         
+        
+        dt=dT(tv);
         //distance from schwarzchild radius
-        R=length(tv.pos.coords.xyz)-stopRad;
-    
-      dt=min(1.,max(R/2.,0.01));
- 
-           
+        //R=length(tv.pos.coords.xyz)-stopRad;
+    // dt=min(0.1,max(R/2.,0.01));    
      // dt=min(step,max(R/2.,0.01));
  
         //get the derivative
@@ -210,6 +230,15 @@ void rk4(inout Vector tv){
             eventHorizon=true;
             break;
         }
+        
+        //if you pass the accretion disk, stop
+        float r=length(tv.pos.coords.xy);
+        float z=tv.pos.coords.z;
+        if(r>1.&&r<4.&&abs(z)<0.05){
+            accretionDisk=true;
+            break;
+        }
+  
        
     }
     
@@ -237,8 +266,9 @@ void rk4(inout Vector tv){
 
 
 
-
 vec3 getPixelColor(Vector rayDir){
+    eventHorizon=false;
+    accretionDisk=false;
     
     vec3 totalColor=vec3(0.);
      
@@ -249,13 +279,17 @@ vec3 getPixelColor(Vector rayDir){
     if(eventHorizon){
         totalColor=EHGrid(sampletv);
     }
+    else if(accretionDisk){
+        totalColor=diskTex(sampletv);
+    }
     else{
     totalColor=skyTex(sampletv);
     }
-    totalColor+=pSphColor;
+    
     return totalColor;
     
 }
+
 
 
 

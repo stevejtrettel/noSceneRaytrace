@@ -79,6 +79,30 @@ return SRGBToLinear(textureGrad(tex,uv,dFdx(uv2), dFdy(uv2)).rgb);
 
 
 
+vec3 diskTex(Vector tv){
+    
+    //get polar coordinates:
+    float r=length(tv.pos.coords.xy);
+    float x=tv.pos.coords.x;
+    float y=tv.pos.coords.y;
+    float theta=atan(y,x);
+    
+    
+    x=mod(10.*r/6.28,2.);
+   y=mod(10.*theta/3.14,2.);
+    vec3 color=vec3(0./255.,92./255.,220./255.);
+     //lightRad controls grid brightness
+    float mag=clamp(1./(50.*x*(2.-x)*y*(2.-y)),0.,20.);
+    return mag*color;
+    
+//    
+//    if(x<1.&&y<1.||x>1.&&y>1.){
+//        return vec3(0.1);
+//    }
+//    else return vec3(0.0);
+//    
+}
+
 //
 //
 ////colors unit sphere at origin with grid
