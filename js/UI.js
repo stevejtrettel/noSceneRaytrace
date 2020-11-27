@@ -16,7 +16,7 @@ let initGui = function () {
         toggleUI: true,
         lightRad: 0.,
         refl: 10,
-        rad: 1,
+        rad: 2,
         step: 1,
         recording: false
     };
@@ -32,9 +32,9 @@ let initGui = function () {
     //    //using to control size of the change in index of refraction
     let reflController = gui.add(guiInfo, 'refl', 0., 20., 1.).name("Grid Spacing");
 
-    let radController = gui.add(guiInfo, 'rad', 1., 3., 0.01).name("Sphere Radius");
+    let radController = gui.add(guiInfo, 'rad', 1., 4., 0.01).name("Orbit Radius");
 
-    let stepController = gui.add(guiInfo, 'step', 0.01, 2., 0.01).name("StepSize");
+    let stepController = gui.add(guiInfo, 'step', 0.5, 3., 0.01).name("Earth Radius");
 
 
 

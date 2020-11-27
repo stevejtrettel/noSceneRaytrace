@@ -44,7 +44,7 @@ Vector getRayPoint(vec2 resolution, vec2 fragCoord){ //creates a tangent vector 
     float z = 0.1 / tan(radians(fov * 0.5));
     // coordinates in the prefered frame at the origin
     vec4 dir = vec4(xy, -z,0.);
-    Vector tv = Vector(ORIGIN, dir);
+    Vector tv = Vector(initialPt, dir);
     tv = tangNormalize(tv);
     return tv;
 }

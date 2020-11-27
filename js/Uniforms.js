@@ -54,6 +54,18 @@ function initGeometry() {
 // Set up shader
 //----------------------------------------------------------------------------------------------------------------------
 
+let earthPos = new Vector3(3, 0, 0);
+let earthFacing = new Matrix4();
+
+let moonPos = new Vector3(5, 0, 0);
+let moonFacing = new Matrix4();
+
+
+
+
+
+
+
 var texture = new TextureLoader().load('images/MilkyWay.jpg');
 //'images/sunset_fairway.jpg');
 
@@ -79,7 +91,7 @@ function setupMaterial(fShader) {
 
             earthCubeTex: { //earth texture to global object
                 type: "t",
-                value: new CubeTextureLoader().setPath('images/SkyCube/')
+                value: new CubeTextureLoader().setPath('images/earth/')
                     .load([ //Cubemap derived from http://www.humus.name/index.php?page=Textures&start=120
                         'posx.jpg',
                         'negx.jpg',
@@ -90,6 +102,10 @@ function setupMaterial(fShader) {
                     ])
             },
 
+            moonTex: {
+                type: "t",
+                value: new TextureLoader().load("images/2k_moon.jpg")
+            },
 
             tex: { //earth texture to global object
                 type: "t",
@@ -105,6 +121,29 @@ function setupMaterial(fShader) {
                 type: "m4",
                 value: globals.position.facing
             },
+
+
+            eP: {
+                type: "v3",
+                value: earthPos
+            },
+
+            earthFacing: {
+                type: "m4",
+                value: earthFacing
+            },
+
+
+            mP: {
+                type: "v3",
+                value: moonPos
+            },
+            moonFacing: {
+                type: "m4",
+                value: moonFacing
+            },
+
+
 
             lightRad: {
                 type: "float",
@@ -142,13 +181,33 @@ function setupMaterial(fShader) {
  */
 function updateMaterial() {
 
-
     globals.time += 0.01;
+
     globals.material.uniforms.time.value = globals.time;
+
+
 
 
     //example of how this worked
     globals.material.uniforms.currentBoostMat.value = globals.position.boost;
+
+
+    //rotate three times per orbit
+    earthFacing = new Matrix4().makeRotationAxis(new Vector3(0.2, 1, 0), -3. * globals.time);
+
+    moonFacing = new Matrix4().makeRotationAxis(new Vector3(0.2, 1, 0), -1. * globals.time);
+
+    earthPos = new Vector3(3. * Math.cos(globals.time), 3. * Math.sin(globals.time), 0.);
+
+    moonPos = (earthPos.clone()).add(new Vector3(1.5 * Math.cos(2. * globals.time), 1.5 * Math.sin(2. * globals.time), 0.))
+
+    //make the orbit
+    globals.material.uniforms.eP.value = earthPos;
+    globals.material.uniforms.mP.value = moonPos;
+
+    globals.material.uniforms.earthFacing.value = earthFacing;
+
+    globals.material.uniforms.moonFacing.value = moonFacing;
 
     globals.material.uniforms.lightRad.value = globals.lightRad;
     globals.material.uniforms.refl.value = globals.refl;

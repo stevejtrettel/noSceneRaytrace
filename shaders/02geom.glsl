@@ -55,7 +55,13 @@ Vector turnAround(Vector v){
 
 
 
+Vector tangDirection(Point p, Point q){
 
+vec4 dir=q.coords-p.coords;
+dir=normalize(dir);
+
+return Vector(p, dir);
+}
 
 
 

@@ -103,78 +103,23 @@ void euler(inout Vector tv){
     sampletv=tv;
 }
 
-//
-//
-//
-//void euler(inout Vector tv){
-//    
-//    //do an iteration of rk4 to the second order equation y''=vector field
-//    
-//    //timestep
-//    float dt=0.05;
-//    
-//    //constants computed during the process
-//    vec4 k1;
-//    vec4 j1;
-//    
-//    //initial conditions
-//    vec4 y=tv.pos.coords;//position
-//    vec4 u=tv.dir;//velocity
-//    
-//    
-//    //iteratively step through rk4
-//    for(int n=0;n<100;n++){
-//        
-//        //compute j1,k2
-//        j1=u*dt;
-//        k1=vecField(y)*dt;
-//      
-//        y+=j1;
-//        u+=k1;
-//    }
-//    
-//    //after the loop, reassemble tv at the endpoint
-//    sampletv=Vector(Point(y),u);
-//    
-//}
-//
 
 
 
 
 
-void rk4(inout Vector tv){
-    
-    float stopRad=rad;
-    //do an iteration of rk4 to the second order equation y''=vector field
-    
-    //timestep
-   // float dist=length(tv.pos.coords.xyz);
-    float dt;
-    float R;
+
+
+
+
+
+void rk4Step(inout Vector tv,float dt){
+
     //constants computed during the process
     velAcc k1,k2,k3,k4;
-    
-    //initial conditions
-   // vec4 y=tv.pos.coords;//position
-    //vec4 u=tv.dir;//velocity
-    
     Vector temp;
     
-    
-    //iteratively step through rk4
-    for(int n=0;n<50;n++){
-       // int(50./(step+0.1))
-      //set the step size to be the min of 0.1 and distance to the sphere (right now 1.)
-        
-        //distance from schwarzchild radius
-        R=length(tv.pos.coords.xyz)-stopRad;
-    
-      dt=min(1.,max(R/2.,0.01));
- 
-           
-     // dt=min(step,max(R/2.,0.01));
- 
+
         //get the derivative
         k1=stateDeriv(tv);
         k1=scale(k1,dt);
@@ -202,29 +147,126 @@ void rk4(inout Vector tv){
         total=scale(total,1./6.);
         
         tv=nudge(tv,total,1.);
-        
-      
-        
-        //if you enter the event horizon, return black
-        if(length(tv.pos.coords.xyz)<stopRad){
-            eventHorizon=true;
-            break;
-        }
-       
-    }
-    
-    //after the loop, reassemble tv at the endpoint
-    sampletv=tv;
     
 }
 
 
 
 
+bool inside(Vector tv,vec3 pos, float rad){
+    if(length(tv.pos.coords.xyz-pos)<rad){
+        return true;
+    }
+    else return false;
+}
 
 
 
 
+void binarySearch(inout Vector tv,float dt,vec3 pos, float rad){
+    //given that you just passed the earth, binary search to find it
+    float dist=0.;
+    //flowing dist doesnt hit the plane, dist+step does:
+    float testDist=dt;
+    Vector temp;
+    for(int i=0;i<4;i++){
+        
+        //divide the step size in half
+         testDist=testDist/2.;
+
+        //test flow by that amount:
+        temp=tv;
+        rk4Step(temp, dist+testDist);
+        //if you are still above the plane, add to distance.
+        if(!inside(temp,pos, rad)){
+            dist+=testDist;
+        }
+        //if not, then don't add: divide in half and try again
+    
+    }
+    
+//step tv ahead by the right ammount;
+  rk4Step(tv,dist);
+    
+}
+
+
+void trace(inout Vector tv){ 
+    
+    //timestep
+   // float dist=length(tv.pos.coords.xyz);
+    float dt;
+    float R,r;
+
+    Vector temp;
+    //iteratively step through rk4
+    for(int n=0;n<50;n++){
+
+        //distance from schwarzchild radius
+        R=length(tv.pos.coords.xyz)-1.;
+    
+        //set dt based on this
+        dt=min(2.,max(R/2.,0.01));
+        
+        //set alternate dt based on earth location:
+         r=length(tv.pos.coords.xyz-earthPos)-earthRad;
+        
+        dt=min(dt,max(r/2.,0.1));
+        
+        
+        
+        //set alternate length based on moon location:
+        
+        r=length(tv.pos.coords.xyz-moonPos)-moonRad;
+        
+        dt=min(dt,max(r/2.,0.1));
+        
+        
+        
+        
+        temp=tv;
+        
+        //do an rk4 step
+        rk4Step(temp,dt);
+        
+        
+    
+        if(inside(temp,earthPos,earthRad)){
+            //if you entered the earth for the first time:
+            //go back to your previous position, and search
+            binarySearch(tv,dt,earthPos,earthRad);
+            //now tv is set right at the earths surface
+            earth=true;
+            break;
+        }
+        
+        
+        if(inside(temp,moonPos,moonRad)){
+            //if you entered the earth for the first time:
+            //go back to your previous position, and search
+            binarySearch(tv,dt,moonPos,moonRad);
+            //now tv is set right at the earths surface
+            moon=true;
+            break;
+        }
+        
+        //otherwise set tv to your new location and keep going
+        tv=temp;
+        
+
+        //if you enter the event horizon, return black
+        if(length(tv.pos.coords.xyz)<1.){
+            eventHorizon=true;
+            break;
+        }
+        
+
+    }
+    
+        //after the loop, reassemble tv at the endpoint
+    sampletv=tv;
+    
+}
 
 
 
@@ -243,16 +285,25 @@ vec3 getPixelColor(Vector rayDir){
     vec3 totalColor=vec3(0.);
      
    //euler(rayDir);
-    rk4(rayDir);
+    trace(rayDir);
     
     //if you don't fall in the black hole, see where you go
     if(eventHorizon){
         totalColor=EHGrid(sampletv);
     }
+
+    else if(earth){
+        totalColor=earthLight(sampletv,vec3(-10,-10,0));
+    }
+    
+        else if(moon){
+        totalColor=moonLight(sampletv,vec3(-10,-10,0));
+    }
+    
     else{
     totalColor=skyTex(sampletv);
     }
-    totalColor+=pSphColor;
+    
     return totalColor;
     
 }

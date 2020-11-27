@@ -40,6 +40,8 @@ const float fov = 90.0;
 int inWhich=0;
 int hitWhich = 0;
 bool eventHorizon=false;
+bool earth=false;
+bool moon=false;
 
 //set by raymarch
 Vector sampletv;
@@ -59,6 +61,7 @@ uniform mat4 facing;
 
 Isometry currentBoost;
 
+Point initialPt;
 
 
 
@@ -68,14 +71,29 @@ Isometry currentBoost;
 
 uniform samplerCube earthCubeTex;
 uniform sampler2D tex;
-
+uniform sampler2D moonTex;
 
 uniform float time;
+
+
+float earthRad=1.;
+float moonRad=0.4;
+
+uniform mat4 earthFacing;
+uniform mat4 moonFacing;
 
 uniform float lightRad;
 uniform float refl;
 
 uniform float rad;
+
+uniform vec3 eP;
+uniform vec3 mP;
+
+vec3 earthPos;
+vec3 moonPos;
+
+
 uniform float step;
 
 
@@ -88,6 +106,16 @@ uniform float step;
 void setVariables(){
     
     currentBoost = Isometry(currentBoostMat);
+    earthPos=rad*eP;
+    moonPos=rad*mP;
+    earthRad=step;
+    moonRad=0.4*step;
+    
+    //where the camera starts:
+    //right now DONT MOVE AT ALL
+    vec3 start=vec3(0,0.,0.);
+    initialPt=Point(
+    vec4(start,1.));
 
     
 }
