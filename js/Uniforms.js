@@ -42,7 +42,7 @@ function initGeometry() {
     globals.position = new Position();
 
     //translate the position back
-    globals.position.translateBy(new Isometry().makeLeftTranslation(new Vector3(0., -10, 0.)));
+    globals.position.translateBy(new Isometry().makeLeftTranslation(new Vector3(0., -20, 0.)));
 
     //rotate to face forwards
     globals.position.rotateFacingBy(new Matrix4().set(1, 0, 0, 0, 0, 0, -1, 0, 0, 1, 0, 0, 0, 0, 0, 1));
@@ -74,7 +74,7 @@ function setupMaterial(fShader) {
 
             time: {
                 type: "f",
-                value: (new Date().getTime()) - time0
+                value: globals.time
             },
 
             earthCubeTex: { //earth texture to global object
@@ -141,6 +141,12 @@ function setupMaterial(fShader) {
  *seems to work fine as uniforms now...
  */
 function updateMaterial() {
+
+
+    globals.time += 0.01;
+    globals.material.uniforms.time.value = globals.time;
+
+
     //example of how this worked
     globals.material.uniforms.currentBoostMat.value = globals.position.boost;
 

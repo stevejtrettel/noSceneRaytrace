@@ -60,6 +60,7 @@ let globals = {
     refl: 10,
     rad: 1,
     step: 1,
+    time: 0,
     //    planes: 1
 };
 

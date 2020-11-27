@@ -43,13 +43,40 @@ return vec2(theta,phi);
 }
 
 
+//vec3 toSphCoordsNoSeam(vec4 v){
+//    
+//    float theta=atan(v.y,v.x);
+//    float theta2=atan(v.y,abs(v.x));
+//    float phi=acos(v.z);
+//return vec3(theta,phi,theta2);
+//}
+//
+//
+
+
+
+
+
+vec4 rotXY(vec4 v, float t){
+    float x=v.x*cos(t)-v.y*sin(t);
+    float y=v.x*sin(t)+v.y*cos(t);
+    
+    return vec4(x,y,v.z,v.w);
+}
+
 vec3 toSphCoordsNoSeam(vec4 v){
+    
+    //rotate the background sky slowly
+    v=rotXY(v,time/30.);
     
     float theta=atan(v.y,v.x);
     float theta2=atan(v.y,abs(v.x));
     float phi=acos(v.z);
 return vec3(theta,phi,theta2);
 }
+
+
+
 
 
 //
