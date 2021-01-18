@@ -191,7 +191,45 @@ void binarySearch(inout Vector tv,float dt,vec3 pos, float rad){
 }
 
 
+
+void teleport(inout Vector tv){
+    float x=tv.pos.coords.x;
+    float y=tv.pos.coords.y;
+    float z=tv.pos.coords.z;
+    
+    float size=25.;
+    float halfSize=size/2.;
+    
+    if(x>halfSize){
+        tv.pos.coords.x=-halfSize+0.1;
+        return;
+    }
+    else if(x<-halfSize){
+        tv.pos.coords.x=halfSize-0.1;
+        return;
+    }
+    else if(y>halfSize){
+        tv.pos.coords.y=-halfSize+0.1;
+        return;
+    }
+    else if(y<-halfSize){
+        tv.pos.coords.y=halfSize-0.1;
+        return;
+    }
+    else if(z>halfSize){
+        tv.pos.coords.z=-halfSize+0.1;
+        return;
+    }
+    else if(z<-halfSize){
+        tv.pos.coords.z=halfSize-0.1;
+        return;
+    }
+}
+
+
 void trace(inout Vector tv){ 
+    
+    int maxSteps=300;
     
     //timestep
    // float dist=length(tv.pos.coords.xyz);
@@ -200,13 +238,16 @@ void trace(inout Vector tv){
 
     Vector temp;
     //iteratively step through rk4
-    for(int n=0;n<50;n++){
+    for(int n=0;n<maxSteps;n++){
 
+        
+        float maxStep=0.25;\
+            
         //distance from schwarzchild radius
         R=length(tv.pos.coords.xyz)-1.;
     
         //set dt based on this
-        dt=min(2.,max(R/2.,0.01));
+        dt=min(maxStep,max(R/2.,0.01));
         
         //set alternate dt based on earth location:
          r=length(tv.pos.coords.xyz-earthPos)-earthRad;
@@ -253,7 +294,7 @@ void trace(inout Vector tv){
         //otherwise set tv to your new location and keep going
         tv=temp;
         
-
+        
         //if you enter the event horizon, return black
         if(length(tv.pos.coords.xyz)<1.){
             eventHorizon=true;
@@ -261,6 +302,13 @@ void trace(inout Vector tv){
         }
         
 
+        
+        //if you leave fundamental domain: teleport
+        teleport(tv);
+        
+        
+        
+        
     }
     
         //after the loop, reassemble tv at the endpoint
